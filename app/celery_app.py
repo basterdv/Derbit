@@ -4,7 +4,8 @@ import os
 
 # Используем переменные окружения для конфигурации Redis
 # Например, REDIS_BROKER_URL="redis://redis:6379/0"
-REDIS_BROKER_URL = os.getenv("REDIS_BROKER_URL", "redis://localhost:6379/0")
+# REDIS_BROKER_URL = os.getenv("REDIS_BROKER_URL", "redis://localhost:6379/0")
+REDIS_BROKER_URL = "redis://127.0.0.1:6379/0"
 
 app = Celery(
     'deribit_tracker',

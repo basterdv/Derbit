@@ -10,9 +10,9 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# class CurrencyPrice(Base):
-#     __tablename__ = "currency_prices"
-#     id = Column(Integer, primary_key=True, index=True)
-#     ticker = Column(String(10), index=True)
-#     price = Column(Float, nullable=False)
-#     timestamp = Column(BigInteger, index=True)
+class CurrencyPrice(Base):
+    __tablename__ = "currency_prices"
+    id = Column(Integer, primary_key=True, index=True)
+    ticker = Column(String(10), index=True)
+    price = Column(Float, nullable=False)
+    timestamp = Column(BigInteger, index=True)

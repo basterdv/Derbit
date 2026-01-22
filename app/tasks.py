@@ -9,6 +9,11 @@ logger = logging.getLogger(__name__)
 # Список тикеров для мониторинга
 TICKERS = ["btc_usd", "eth_usd"]
 
+proxies = {
+    'http': 'http://7AFJmS:uG27aQ@163.198.111.111:8000',
+    'https': 'http://7AFJmS:uG27aQ@163.198.111.111:8000',
+}
+
 
 @app.task(name="fetch_deribit_prices")
 def fetch_deribit_prices():
@@ -17,8 +22,8 @@ def fetch_deribit_prices():
     try:
         for index_name in TICKERS:
             # API Deribit: https://docs.deribit.com
-            url = f"https://www.deribit.com{index_name}"
-            response = requests.get(url, timeout=10)
+            url = f"https://deribit.com/api/v2/public/get_index_price?index_name={index_name}"
+            response = requests.get(url, proxies=proxies, timeout=10)
             response.raise_for_status()
 
             data = response.json()
