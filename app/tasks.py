@@ -2,6 +2,8 @@ import requests
 import time
 import logging
 from app.celery_app import app
+from celery import shared_task
+
 from app.database import SessionLocal, CurrencyPrice
 
 logger = logging.getLogger(__name__)
@@ -16,10 +18,11 @@ proxies = {
 
 
 
-@app.task(name="fetch_deribit_prices")
+@shared_task(name="app.tasks.fetch_deribit_prices")
 def fetch_deribit_prices():
-    print('gggggggggggggggggggggggggg')
     """Задача для получения цен и сохранения в БД."""
+
+    print('Working...')
     db = SessionLocal()
 
     # try:
