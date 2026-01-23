@@ -11,10 +11,6 @@ logger = logging.getLogger(__name__)
 # Список тикеров для мониторинга
 TICKERS = ["btc_usd", "eth_usd"]
 
-proxies = {
-    'http': 'http://7AFJmS:uG27aQ@163.198.111.111:8000',
-    'https': 'http://7AFJmS:uG27aQ@163.198.111.111:8000',
-}
 
 
 
