@@ -1,9 +1,10 @@
 import asyncio
 import logging
 import time
-from decouple import config
+
 import aiohttp
 from celery import shared_task
+from decouple import config
 
 from app.database import SessionLocal, CurrencyPrice
 

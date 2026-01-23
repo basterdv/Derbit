@@ -1,11 +1,15 @@
-import os
+from decouple import config
 from sqlalchemy import create_engine, Column, Integer, Float, String, BigInteger
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
-# Жестко прописанная строка без переменных
-# jdbc:postgresql://localhost:5432/derbitdb
-DATABASE_URL = "postgresql://postgres:1234@localhost:5432/derbitdb"
+POSTGRES_USER=config("POSTGRES_USER")
+POSTGRES_PASSWORD=config("POSTGRES_PASSWORD")
+POSTGRES_DB=config("POSTGRES_DB")
+POSTGRES_HOST=config("POSTGRES_HOST")
+POSTGRES_PORT=config("POSTGRES_PORT")
+
+DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
