@@ -1,17 +1,20 @@
 import asyncio
-import aiohttp
 import logging
 import time
-from app.celery_app import app
+from decouple import config
+import aiohttp
 from celery import shared_task
+
 from app.database import SessionLocal, CurrencyPrice
 
 logger = logging.getLogger(__name__)
 
 TICKERS = ["btc_usd", "eth_usd"]
-# Для aiohttp прокси передается одной строкой
-PROXY_URL = "http://163.198.111.111:8000"
-PROXY_AUTH = aiohttp.BasicAuth('7AFJmS', 'uG27aQ')
+
+PROXY_URL = config("PROXY_URL")
+PROXY_AUTH_LOGIN = config("PROXY_AUTH_LOGIN")
+PROXY_AUTH_PASSWORD = config("PROXY_AUTH_PASSWORD")
+PROXY_AUTH = aiohttp.BasicAuth(PROXY_AUTH_LOGIN, PROXY_AUTH_PASSWORD)
 
 
 async def fetch_ticker(session, index_name):
