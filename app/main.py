@@ -9,7 +9,6 @@ from app.database import SessionLocal, engine, Base, CurrencyPrice
 logger = logging.getLogger(__name__)
 app = FastAPI()
 
-# Создаст таблицы при запуске, если их нет
 Base.metadata.create_all(bind=engine)
 
 
