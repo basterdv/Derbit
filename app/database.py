@@ -4,7 +4,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 # Жестко прописанная строка без переменных
-DATABASE_URL = "postgresql://postgres:1234@localhost:5432/deribitdb"
+# jdbc:postgresql://localhost:5432/derbitdb
+DATABASE_URL = "postgresql://postgres:1234@localhost:5432/derbitdb"
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
