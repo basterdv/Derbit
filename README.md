@@ -20,3 +20,12 @@ deribit_tracker/
 Запустить проект командой docker-compose up --build.
 Документация Swagger будет доступна по адресу http://localhost:8000/docs.
 Полный исходный код и Docker-конфигурация должны быть выложены на GitLab в соответствии с требованиями.
+
+celery -A app.celery_app beat --loglevel=info 
+celery -A app.celery_app worker --loglevel=info
+python.exe -m uvicorn app.main:app --reload   
+wsl
+sudo service redis-server start
+
+
+

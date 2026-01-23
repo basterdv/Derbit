@@ -15,12 +15,15 @@ proxies = {
 }
 
 
+
 @app.task(name="fetch_deribit_prices")
 def fetch_deribit_prices():
+    print('gggggggggggggggggggggggggg')
     """Задача для получения цен и сохранения в БД."""
     db = SessionLocal()
-    try:
-        for index_name in TICKERS:
+
+    # try:
+    for index_name in TICKERS:
             # API Deribit: https://docs.deribit.com
             url = f"https://deribit.com/api/v2/public/get_index_price?index_name={index_name}"
             response = requests.get(url, proxies=proxies, timeout=10)
@@ -41,9 +44,9 @@ def fetch_deribit_prices():
                 db.add(new_entry)
                 logger.info(f"Saved: {ticker_short} - {index_price}")
 
-        db.commit()
-    except Exception as e:
-        logger.error(f"Error fetching prices: {e}")
-        db.rollback()
-    finally:
-        db.close()
+    db.commit()
+    # except Exception as e:
+    #     logger.error(f"Error fetching prices: {e}")
+    #     db.rollback()
+    # finally:
+    #     db.close()
