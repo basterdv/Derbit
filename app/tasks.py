@@ -35,7 +35,7 @@ async def fetch_ticker(session, index_name):
                 }
     except Exception as e:
         logger.error(f"Error fetching {index_name}: {e}")
-    return None
+        return None
 
 
 async def run_fetch():
