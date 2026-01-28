@@ -55,7 +55,7 @@ POSTGRES_PORT=5432
 # Настройки Redis
 REDIS_BROKER_URL=redis://redis:6379/0
 
-# Настройки для proxy для подключения к DERIBIT
+# Настройки для proxy для подключения к DERIBIT(Даные нужно подставить с рабочего прокси,это демо данные)
 PROXY_URL=http://163.198.111.111:8000
 PROXY_AUTH_LOGIN=4sgJmS
 PROXY_AUTH_PASSWORD=Tk27aP
