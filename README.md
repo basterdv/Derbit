@@ -45,8 +45,20 @@ deribit_tracker/
 *   Создайте файл .env в корне проекта и укажите параметры подключения:
 
 ````
-DB_URL=postgresql://user:password@db:5432/deribit_db
-REDIS_URL=redis://redis:6379/0
+# Настройки Postgres
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=1234
+POSTGRES_DB=derbitdb
+POSTGRES_HOST=db # Хост для Докера, если на локальной машине то localhost
+POSTGRES_PORT=5432
+
+# Настройки Redis
+REDIS_BROKER_URL=redis://redis:6379/0
+
+# Настройки для proxy для подключения к DERIBIT
+PROXY_URL=http://163.198.111.111:8000
+PROXY_AUTH_LOGIN=4sgJmS
+PROXY_AUTH_PASSWORD=Tk27aP
 ````
 
 ### 2. Запуск через Docker (Рекомендуется)
@@ -61,7 +73,7 @@ docker-compose up --build
 Если вы запускаете компоненты отдельно (например, через WSL):
 *   Redis: sudo service redis-server start
 *   API: python -m uvicorn app.main:app --reload
-*   Celery Worker: celery -A app.celery_app worker --loglevel=info
+*   Celery Worker: celery -A app.celery_app worker --beat --loglevel=info -P solo
 *   Celery Beat: celery -A app.celery_app beat --loglevel=info
 
 

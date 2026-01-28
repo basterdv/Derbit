@@ -1,30 +1,53 @@
 version: '3.8'
 
 services:
+  # --- Контейнер Базы Данных ---
   db:
-    image: postgres:14
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
+    image: postgres:15-alpine
+    container_name: deribit_postgres
+    restart: always
     environment:
-      POSTGRES_DB: cryptodb
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5432:5432"
-    restart: unless-stopped
-
-  api:
-    build: .
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+      - "5433:5432" # Если локально стоит Postgres, тогда порты оставляем так
     volumes:
-      - .:/app
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # --- Контейнер Приложения (API + Worker) ---
+  app:
+    build: .
+    container_name: deribit_app
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      - REDIS_URL=${REDIS_URL}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - PYTHONPATH=/app
+
     ports:
       - "8000:8000"
-    depends_on:
-      - db
-    environment:
-      DATABASE_URL: postgresql://user:password@db:5432/cryptodb # Важно: хост - это имя сервиса 'db'
-    restart: unless-stopped
+    # Запускаем сразу API и в фоне Celery для экономии контейнеров
+    command: sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 & celery -A app.celery_app worker --beat --loglevel=info -P solo --pidfile= --schedule=/tmp/celerybeat-schedule"
+
+  # Redis для работы Celery
+  redis:
+    image: redis:7-alpine
+    container_name: deribit_redis
 
 volumes:
   postgres_data:

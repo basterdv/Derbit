@@ -1,10 +1,15 @@
-FROM python:3.10-slim
+# Используем образ Python
+FROM python:3.11-slim
 
 WORKDIR /app
 
+# Установка зависимостей
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
+# Копируем исходный код
 COPY . .
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Открываем порт для FastAPI
+EXPOSE 8000
